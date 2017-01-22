@@ -33,5 +33,14 @@ module.exports = {
           });
         });
       });
+    },
+
+    addTask(data) {
+      return new Promise((resolve, reject) => {
+        this.connected.then(db => {
+          db.collection(collectionName).insert(data);
+          resolve(data);
+        });
+      });
     }
 };

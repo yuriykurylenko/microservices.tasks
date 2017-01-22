@@ -2,6 +2,7 @@ const restify = require('restify');
 const db = require('./db.js');
 
 const server = restify.createServer();
+server.use(restify.bodyParser({ mapParams: true }));
 
 db.connect();
 
@@ -16,13 +17,26 @@ server.get('/tasks', (req, res, next) => {
 });
 
 server.get('/tasks/my', (req, res, next) => {
-  console.log(req.params);
   db.getTasks({ assignee: req.params.userId }).then(
     tasks => {
       res.send(200, tasks);
       next();
     },
     err => res.send(500, tasks)
+  );
+});
+
+server.post('/tasks/my', (req, res, next) => {
+  var body = req.body;
+  body.assignee = body.userId;
+  delete body.userId;
+
+  db.addTask(body).then(
+    task => {
+      res.send(201, task);
+      next();
+    },
+    err => res.send(500)
   );
 });
 
