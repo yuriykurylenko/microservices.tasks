@@ -19,18 +19,19 @@ module.exports = {
         });
     },
 
-    getTasks() {
-        return new Promise((resolve, reject) => {
-            this.connected.then(db => {
-                db.collection(collectionName).find({}, { '_id': false }).toArray((err, docs) => {
-                    if (err !== null) {
-                        reject(err);
-                        return;
-                    }
+    getTasks(filter) {
+      filter = filter || {};
+      return new Promise((resolve, reject) => {
+        this.connected.then(db => {
+          db.collection(collectionName).find({}, { '_id': false }).toArray((err, docs) => {
+            if (err !== null) {
+                reject(err);
+                return;
+            }
 
-                    resolve(docs);
-                });
-            });
+            resolve(docs);
+          });
         });
+      });
     }
 };
