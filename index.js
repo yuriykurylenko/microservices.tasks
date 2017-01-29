@@ -3,6 +3,7 @@ const db = require('./db.js');
 
 const server = restify.createServer();
 server.use(restify.bodyParser({ mapParams: true }));
+server.use(restify.queryParser());
 
 db.connect();
 
@@ -17,7 +18,7 @@ server.get('/tasks', (req, res, next) => {
 });
 
 server.get('/tasks/my', (req, res, next) => {
-  db.getTasks({ assignee: req.params.userId }).then(
+  db.getTasks({ assignee: Number(req.params.userId) }).then(
     tasks => {
       res.send(200, tasks);
       next();

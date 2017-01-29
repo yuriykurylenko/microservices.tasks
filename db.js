@@ -23,7 +23,7 @@ module.exports = {
       filter = filter || {};
       return new Promise((resolve, reject) => {
         this.connected.then(db => {
-          db.collection(collectionName).find({}, { '_id': false }).toArray((err, docs) => {
+          db.collection(collectionName).find(filter, { '_id': false }).toArray((err, docs) => {
             if (err !== null) {
                 reject(err);
                 return;
